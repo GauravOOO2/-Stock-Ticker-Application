@@ -6,7 +6,7 @@ export default function BackButton() {
   return (
     <button
       onClick={() => router.push("/")}
-      className="text-white px-2 py-2 rounded-md font-medium bg-gray-600 hover:bg-gray-700 transition"
+      className="text-white px-2 py-2 rounded-md font-medium bg-gray-600"
     >
       Back
     </button>
