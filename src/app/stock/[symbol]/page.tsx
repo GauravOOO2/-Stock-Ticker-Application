@@ -4,12 +4,21 @@ import StockChartWrapper from "@/components/StockChartWrapper";
 import type { Metadata } from "next";
 import BackButton from "@/components/BackButton";
 
-export const metadata: Metadata = {
-  title:
-    "Stock Ticker Application Graph Page, Visualization, Days filter, Weeks filter, Months Filter.",
-  description:
-    "Website that is capable of providing visualization of any stock data",
-};
+
+export async function generateMetadata(
+  { params }: { params: { symbol: string } }): Promise<Metadata> {
+  const { symbol } = params;
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API}/search?keyword=${symbol}&length=1`);
+  const data = await res.json();
+
+  const companyName = data?.[0]?.company || symbol;
+
+  return {
+    title: `${companyName} (${symbol}) Stock Chart & Analysis`,
+    description: `Explore detailed price chart and analysis for ${companyName}.`,
+  };
+}
 
 export default async function StockDetails({
   params,
@@ -17,6 +26,8 @@ export default async function StockDetails({
   params: Promise<{ symbol: string }>;
 }) {
   const { symbol } = await params;
+
+
 
   return (
     <div className="min-h-screen bg-gray-50">

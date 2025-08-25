@@ -17,6 +17,10 @@ type DayRange = keyof typeof dayConfigs;
 
 export default function StockChartWrapper({ symbol }: { symbol: string }) {
   const [prices, setPrices] = useState<CompanyDetails[]>([]);
+  const [favStocksList, setFavStockList] = useState<string[]>(()=>{
+    const getAllFavStocksList = localStorage.getItem("favStocks")
+    return getAllFavStocksList ? JSON.parse(getAllFavStocksList) : []
+  })
   const [selected, setSelected] = useState<DayRange>("1W");
   const [loading, setLoading] = useState(false);
 
@@ -41,12 +45,29 @@ export default function StockChartWrapper({ symbol }: { symbol: string }) {
     
   },[selected, graphLoad]);
 
+
+  const handleFavIconClick = (symbol: string)=>{
+    setFavStockList([...favStocksList, symbol])
+  }
+
+useEffect(()=>{
+  localStorage.setItem("favStocks", JSON.stringify(favStocksList) )
+}, [favStocksList])
+
+
+
+
+
   return (
     <div>
+      <button className="border-2 rounded-2xl text-black" onClick={()=>handleFavIconClick(symbol)}  >Fav Stock</button>
       {loading ? (
         <p className="text-gray-500">Loading chart...</p>
       ) : (
-        <StockChart symbol={symbol} prices={prices} />
+        <div>
+          
+          <StockChart symbol={symbol} prices={prices} />
+        </div>
       )}
 
       <div className="flex gap-2 mt-4 ">

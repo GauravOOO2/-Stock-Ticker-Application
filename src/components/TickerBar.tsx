@@ -1,5 +1,5 @@
 import { StockMover, tickerType } from "@/types/ApplicationTypes";
-
+import Link from "next/link";
 export default function TickerBar({ initialData }: { initialData: tickerType }) {
   const movers: StockMover[] = [
     ...(initialData.gainers || []),
@@ -13,6 +13,7 @@ export default function TickerBar({ initialData }: { initialData: tickerType }) 
     <div className="w-full bg-gray-900 text-white overflow-hidden">
       <div className="flex animate-marquee whitespace-nowrap">
         {movers.map((stock, i) => (
+         <Link key={i} href={`/stock/${stock.symbol}`} >
           <div key={i} className="flex items-center mx-6">
             <span className="font-bold">{stock.symbol}</span>
             <span className="ml-2">{stock.close.toFixed(2)}</span>
@@ -24,6 +25,7 @@ export default function TickerBar({ initialData }: { initialData: tickerType }) 
               {stock.percent.toFixed(2)}%
             </span>
           </div>
+         </Link>
         ))}
       </div>
     </div>
